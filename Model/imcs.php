@@ -14,7 +14,7 @@ class Imcs
         $this->db = Connection::getInstance();
     }
 
-    public function createImc($weight, $height, $result) {
+    public function createImc($weight, $height, $userId) {
         try {
             $sql = "INSERT INTO imc (weight, height, user_id, created_at) VALUES (:weight, :height, :user_id, NOW())";
 
@@ -26,7 +26,8 @@ class Imcs
             $stmt->execute();
 
         } catch (PDOException $error) {
-            echo "Erro ao executar o comando " . $error->getMessage();
+            echo "Erro ao criar IMC: " . $error->getMessage();
+            return false;
         }
     }
 }
