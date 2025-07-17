@@ -56,3 +56,4 @@ class ImcController
       return $this->imcsModel->createImc($weight, $height, $imcResult);
     }
 }
+?>
