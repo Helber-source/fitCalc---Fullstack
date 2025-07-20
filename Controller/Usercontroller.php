@@ -64,11 +64,9 @@ class UserController
         return isset($_SESSION['id']);
     }
     // RESGATAR DADOS DO USUÁRIO
-    public function getUserData($id, $user_fullname, $email)
+    public function getUserData($user_id, $user_fullname, $email)
     {
-        $id = $_SESSION['id'];
-
-        return $this->userModel->getUserInfo($id, $user_fullname, $email);
+        return $this->userModel->getUserInfo($user_id, $user_fullname, $email);
     }
 }
 

@@ -54,7 +54,7 @@ class User{
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->bindParam(":user_fullname", $user_fullname, PDO::PARAM_STR);
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
-            
+
             $stmt->execute();
 
             //fetch = queryselector ();

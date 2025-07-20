@@ -1,9 +1,12 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Model\User;
+//IMPORTANDO O USERCONTROLLER
+use Controller\UserController;
 
-$user = new User();
+$userController = new UserController();
+
+$registerUserMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['user_fullname'], $_POST['email'], $_POST['password'])) {
@@ -11,7 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $user->registerUser($userfullname, $password, $email);
+        //USO DO CONTROLLER PARA VERIFICAÇAO DE EMAIL E CADASTRO
+
+        //JA EXISTE UM EMAIL CADASTRADO?
+        if ($userController->checkUserByEmail($email)) {
+            $registerUserMessage = 'Email já cadastrado.';
+        } else {
+            if ($userController->registerUser($userfullname, $password, $email)) {
+                header('Location: ../index.php');
+                exit;
+            } else {
+                $registerUserMessage = 'Erro ao cadastrar usuário.';
+            }
+        }
     }
 }
 
@@ -106,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="text-center">Já tem uma conta? <a href="../index.php">Faça login aqui</a></p>
             </div>
         </form>
-        <p></p>
+        <p> <?php echo $registerUserMessage; ?></p>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"

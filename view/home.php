@@ -1,17 +1,31 @@
 <?php
-
+session_start();
 require_once '../vendor/autoload.php';
 
 use Model\Imcs;
 
 use Controller\ImcController;
+use Controller\UserController;
 
-$imcs = new Imcs();
+$UserController = new UserController();
 $imcController = new ImcController();
 
 var_dump($imcController);
 
 $imcResult = null;
+$userInfo = null;
+
+if (!$UserController->isLoggedIn()) {
+    header('Location: ../index.php');
+    exit();
+}
+    
+
+$user_id = $_SESSION['user_id'];
+$user_fullname = $_SESSION['user_fullname'];
+$email = $_SESSION['email'];    
+
+$userInfo = $UserController->getUserData($user_id, $user_fullname, $email);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    if (isset($_POST['weight']) && isset($_POST['height'])) {
@@ -62,7 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </svg>
                 </figure>
                 <!-- INFORMAÇÃO DO USUÁRIO -->
-            </div>
+            <?php if ($userInfo): ?>
+                <div class="user_info_details d-flex flex-column">
+                    <p class="text-white m-0"> <?php echo htmlspecialchars($userInfo['user_fullname']); ?></p>
+                    <p> <?php echo htmlspecialchars($userInfo['email']); ?></p>
+                </div>
+            <?php endif; ?>
+            </div>  
 
             <div class="d-flex gap-4">
                 <button class="bg-button rounded-3 border-0 d-flex flex-row justify-content-center align-items-center">
